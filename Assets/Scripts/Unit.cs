@@ -4,21 +4,20 @@ using UnityEngine;
 
 public class Unit : MonoBehaviour
 {
+    [SerializeField] private float moveSpeed = 4f;
     private Vector3 targetPosition;
 
     private void Update()
     {
-        if (Vector3.Distance(transform.position, targetPosition) < 0.1f) 
+        float stopDistance = 0.1f;
+        if (Vector3.Distance(transform.position, targetPosition) > stopDistance)
         {
-            return;
+            Vector3 direction = (targetPosition - transform.position).normalized;
+            transform.position += direction * moveSpeed * Time.deltaTime;
         }
-        Vector3 moveDirection = (targetPosition - transform.position).normalized;
-        float moveSpeed = 4f;
-        transform.position += moveDirection * moveSpeed * Time.deltaTime;
-
-        if (Input.GetKeyDown(KeyCode.T))
+        if (Input.GetMouseButtonDown(0))
         {
-            Move(new Vector3(4, 0, 4));
+            Move(MouseWorld.GetMouseWorldPosition());
         }
     }
     private void Move(Vector3 targetPosition)
