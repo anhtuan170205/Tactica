@@ -44,6 +44,10 @@ public class UnitActionSystem : MonoBehaviour
         {
             return;
         }
+        if (!TurnSystem.Instance.IsPlayerTurn())
+        {
+            return;
+        }
         if (TryHandleUnitSelection())
         {
             return;
@@ -92,6 +96,10 @@ public class UnitActionSystem : MonoBehaviour
                 if (unit != null)
                 {
                     if (unit == selectedUnit)
+                    {
+                        return false;
+                    }
+                    if (unit.IsEnemyUnit())
                     {
                         return false;
                     }

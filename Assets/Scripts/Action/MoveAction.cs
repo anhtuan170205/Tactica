@@ -33,8 +33,7 @@ public class MoveAction : BaseAction
         else
         {
             unitAnimator.SetBool("isRunning", false);
-            isActive = false;
-            onActionComplete();
+            ActionComplete();
         }
         Quaternion targetRotation = Quaternion.LookRotation(direction);
         transform.rotation = Quaternion.Slerp(transform.rotation, targetRotation, rotateSpeed * Time.deltaTime);
@@ -42,9 +41,8 @@ public class MoveAction : BaseAction
 
     public override void ExecuteAction(GridPosition gridPosition, Action onActionComplete)
     {
-        this.onActionComplete = onActionComplete;
+        ActionStart(onActionComplete);
         this.targetPosition = LevelGrid.Instance.GetWorldPosition(gridPosition);
-        isActive = true;
     }
 
     public override List<GridPosition> GetValidActionGridPositionList()

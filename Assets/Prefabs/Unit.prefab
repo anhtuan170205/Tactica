@@ -110,6 +110,7 @@ GameObject:
   - component: {fileID: 6946672347273119860}
   - component: {fileID: -5656222356394633536}
   - component: {fileID: -5632767559432797360}
+  - component: {fileID: -9157801943316465467}
   m_Layer: 7
   m_Name: Unit
   m_TagString: Untagged
@@ -167,6 +168,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 1651a3ab341b04ace8b9860bfae5ae74, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  isEnemyUnit: 0
 --- !u!114 &-5656222356394633536
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -179,6 +181,8 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 1168625a882124c39a9b4eb611f57758, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  moveSpeed: 4
+  rotateSpeed: 15
   unitAnimator: {fileID: 6950338058899930704}
   moveRange: 4
 --- !u!114 &-5632767559432797360
@@ -191,6 +195,18 @@ MonoBehaviour:
   m_Enabled: 1
   m_EditorHideFlags: 0
   m_Script: {fileID: 11500000, guid: 293e7c35cea7c4a4e885e31e65936b8f, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+--- !u!114 &-9157801943316465467
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 3487554068827873907}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 60877f97a70234e9c9bf42143c54d790, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
 --- !u!1001 &5976359445358174718
