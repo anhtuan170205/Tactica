@@ -5,6 +5,7 @@ using System;
 
 public class ShootAction : BaseAction
 {
+    public event EventHandler OnShoot;
     private enum State
     {
         Aiming,
@@ -27,10 +28,7 @@ public class ShootAction : BaseAction
         switch (state)
         {
             case State.Aiming:
-                Vector3 aimDirection = (targetUnit.GetWorldPosition() - unit.GetWorldPosition()).normalized;
-                Quaternion aimRotation = Quaternion.LookRotation(aimDirection);
-                float rotateSpeed = 10f;
-                unit.transform.rotation = Quaternion.Slerp(unit.transform.rotation, aimRotation, rotateSpeed * Time.deltaTime);
+                Aim();
                 break;
             case State.Shooting:
                 if (canShootBullet)
@@ -127,5 +125,13 @@ public class ShootAction : BaseAction
     private void Shoot()
     {
         targetUnit.Damage();
+        OnShoot?.Invoke(this, EventArgs.Empty);
+    }
+    private void Aim()
+    {
+        Vector3 aimDirection = (targetUnit.GetWorldPosition() - unit.GetWorldPosition()).normalized;
+        Quaternion aimRotation = Quaternion.LookRotation(aimDirection);
+        float rotateSpeed = 10f;
+        unit.transform.rotation = Quaternion.Slerp(unit.transform.rotation, aimRotation, rotateSpeed * Time.deltaTime);
     }
 }

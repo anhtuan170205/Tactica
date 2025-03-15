@@ -5,9 +5,10 @@ using System;
 
 public class MoveAction : BaseAction
 {
+    public event EventHandler OnStartMove;
+    public event EventHandler OnCompleteMove; 
     [SerializeField] private float moveSpeed = 4f;
     [SerializeField] private float rotateSpeed = 15f;
-    [SerializeField] private Animator unitAnimator;
     [SerializeField] private int moveRange = 5;
     private Vector3 targetPosition;
 
@@ -28,11 +29,10 @@ public class MoveAction : BaseAction
         if (Vector3.Distance(transform.position, targetPosition) > stopDistance)
         {
             transform.position += direction * moveSpeed * Time.deltaTime;
-            unitAnimator.SetBool("isRunning", true);
         }
         else
         {
-            unitAnimator.SetBool("isRunning", false);
+            OnCompleteMove?.Invoke(this, EventArgs.Empty);
             ActionComplete();
         }
         Quaternion targetRotation = Quaternion.LookRotation(direction);
@@ -43,6 +43,7 @@ public class MoveAction : BaseAction
     {
         ActionStart(onActionComplete);
         this.targetPosition = LevelGrid.Instance.GetWorldPosition(gridPosition);
+        OnStartMove?.Invoke(this, EventArgs.Empty);
     }
 
     public override List<GridPosition> GetValidActionGridPositionList()
