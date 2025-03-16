@@ -23,6 +23,7 @@ public class ShootAction : BaseAction
     private float stateTimer;
     private Unit targetUnit;
     private bool canShootBullet;
+    [SerializeField] private int damage = 40;
 
     private void Update()
     {
@@ -129,7 +130,7 @@ public class ShootAction : BaseAction
     }
     private void Shoot()
     {
-        targetUnit.Damage();
+        targetUnit.Damage(damage);
         OnShoot?.Invoke(this, new OnShootEventArgs { targetUnit = targetUnit, shootUnit = unit });
     }
     private void Aim()
