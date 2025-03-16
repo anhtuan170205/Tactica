@@ -5,7 +5,13 @@ using System;
 
 public class ShootAction : BaseAction
 {
-    public event EventHandler OnShoot;
+    public event EventHandler<OnShootEventArgs> OnShoot;
+
+    public class OnShootEventArgs : EventArgs
+    {
+        public Unit targetUnit;
+        public Unit shootUnit;
+    }
     private enum State
     {
         Aiming,
@@ -73,7 +79,6 @@ public class ShootAction : BaseAction
                 }
                 break;
         }
-        Debug.Log(state);
     }
     public override string GetActionName()
     {
@@ -125,7 +130,7 @@ public class ShootAction : BaseAction
     private void Shoot()
     {
         targetUnit.Damage();
-        OnShoot?.Invoke(this, EventArgs.Empty);
+        OnShoot?.Invoke(this, new OnShootEventArgs { targetUnit = targetUnit, shootUnit = unit });
     }
     private void Aim()
     {
