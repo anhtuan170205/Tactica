@@ -121,12 +121,12 @@ public class ShootAction : BaseAction
     
     public override void ExecuteAction(GridPosition gridPosition, Action onActionComplete)
     {
-        ActionStart(onActionComplete);
         targetUnit = LevelGrid.Instance.GetUnitAtGridPosition(gridPosition);
         state = State.Aiming;
         float aimDuration = 0.5f;
         stateTimer = aimDuration;
         canShootBullet = true;
+        ActionStart(onActionComplete);
     }
     private void Shoot()
     {
@@ -139,5 +139,9 @@ public class ShootAction : BaseAction
         Quaternion aimRotation = Quaternion.LookRotation(aimDirection);
         float rotateSpeed = 10f;
         unit.transform.rotation = Quaternion.Slerp(unit.transform.rotation, aimRotation, rotateSpeed * Time.deltaTime);
+    }
+    public Unit GetTargetUnit()
+    {
+        return targetUnit;
     }
 }

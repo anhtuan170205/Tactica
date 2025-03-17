@@ -86,6 +86,10 @@ public class Unit : MonoBehaviour
     {
         return actionPoints;
     }
+    public float GetActionPointsNormalized()
+    {
+        return (float)actionPoints / ACTION_POINT_MAX;
+    }
 
     private void TurnSystem_OnTurnChanged(object sender, EventArgs e)
     {
