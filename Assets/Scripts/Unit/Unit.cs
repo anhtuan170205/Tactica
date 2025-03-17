@@ -7,6 +7,7 @@ public class Unit : MonoBehaviour
 {
     private const int ACTION_POINT_MAX = 2;
     public static event EventHandler OnAnyActionPointsChanged;
+    public static event EventHandler OnAnyUnitDied;
     [SerializeField] private bool isEnemyUnit;
     private GridPosition gridPosition;
     private HealthSystem healthSystem;
@@ -36,8 +37,10 @@ public class Unit : MonoBehaviour
         GridPosition newGridPosition = LevelGrid.Instance.GetGridPosition(transform.position);
         if (newGridPosition != gridPosition)
         {
-            LevelGrid.Instance.UnitMovedGridPosition(this, gridPosition, newGridPosition);
+            GridPosition oldGridPosition = gridPosition;
             gridPosition = newGridPosition;
+            LevelGrid.Instance.UnitMovedGridPosition(this, oldGridPosition, newGridPosition);
+
         }
     }
     public MoveAction GetMoveAction()
@@ -113,6 +116,7 @@ public class Unit : MonoBehaviour
     private void HealthSystem_OnDie(object sender, EventArgs e)
     {
         LevelGrid.Instance.RemoveUnitAtGridPosition(gridPosition, this);
+        OnAnyUnitDied?.Invoke(this, EventArgs.Empty);
         Destroy(gameObject);
     }
 }

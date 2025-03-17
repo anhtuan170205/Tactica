@@ -12,15 +12,10 @@ public class Testing : MonoBehaviour
 
     void Update()
     {
-        Draw();
     }
 
     private void Draw()
     {
-        if (Input.GetKeyDown(KeyCode.T))
-        {
-            GridSystemVisual.Instance.HideAllGridPosition();
-            GridSystemVisual.Instance.ShowGridPositionList(unit.GetMoveAction().GetValidActionGridPositionList());
-        }
+
     }
 }
