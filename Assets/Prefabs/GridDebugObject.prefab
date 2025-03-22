@@ -45,7 +45,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 345bd4ce415e64afa97729fffe4700ac, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  textMeshPro: {fileID: 4080922129651844741}
+  gridPositionText: {fileID: 4080922129651844741}
 --- !u!1 &7290356560758547695
 GameObject:
   m_ObjectHideFlags: 0
@@ -58,7 +58,7 @@ GameObject:
   - component: {fileID: 4579299332792319929}
   - component: {fileID: 4080922129651844741}
   m_Layer: 0
-  m_Name: Text (TMP)
+  m_Name: GridPositionText
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
