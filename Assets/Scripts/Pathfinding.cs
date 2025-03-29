@@ -8,6 +8,7 @@ public class Pathfinding : MonoBehaviour
     private const int MOVE_STRAIGHT_COST = 10;
     private const int MOVE_DIAGONAL_COST = 14;
     [SerializeField] private Transform gridDebugObjectPrefab;
+    [SerializeField] private LayerMask obstaclesLayerMask;
     private int width;
     private int height;
     private float cellSize;
@@ -24,6 +25,29 @@ public class Pathfinding : MonoBehaviour
         else
         {
             Destroy(gameObject);
+        }
+    }
+
+    public void Setup(int width, int height, float cellSize)
+    {
+        this.width = width;
+        this.height = height;
+        this.cellSize = cellSize;
+        gridSystem = new GridSystem<PathNode>(width, height, cellSize, (GridSystem<PathNode> g, GridPosition gridPosition) => new PathNode(gridPosition));
+        gridSystem.CreateDebugObject(gridDebugObjectPrefab);
+
+        for (int x = 0; x < width; x++)
+        {
+            for (int z = 0; z < height; z++)
+            {
+                GridPosition gridPosition = new GridPosition(x, z);
+                Vector3 worldPosition = gridSystem.GetWorldPosition(gridPosition);
+                float rayCastOffsetDistance = 5f;
+                if (Physics.Raycast(worldPosition + Vector3.down * rayCastOffsetDistance, Vector3.up, rayCastOffsetDistance * 2, obstaclesLayerMask))
+                {
+                    GetNode(x, z).SetIsWalkable(false);
+                }
+            }
         }
     }
     public List<GridPosition> FindPath(GridPosition startGridPosition, GridPosition endGridPosition)
@@ -68,6 +92,11 @@ public class Pathfinding : MonoBehaviour
                 {
                     continue;
                 }
+                if (!neighbourNode.IsWalkable())
+                {
+                    closedList.Add(neighbourNode);
+                    continue;
+                }
                 int tentativeGCost = currentNode.GetGCost() + CalculateDistance(currentNode.GetGridPosition(), neighbourNode.GetGridPosition());
                 if (tentativeGCost < neighbourNode.GetGCost())
                 {
@@ -87,9 +116,8 @@ public class Pathfinding : MonoBehaviour
     }
     public int CalculateDistance(GridPosition gridPositionA, GridPosition gridPositionB)
     {
-        GridPosition gridPositionDistance = gridPositionA - gridPositionB;
-        int xDistance = Mathf.Abs(gridPositionDistance.x);
-        int zDistance = Mathf.Abs(gridPositionDistance.z);
+        int xDistance = Mathf.Abs(gridPositionA.x - gridPositionB.x);
+        int zDistance = Mathf.Abs(gridPositionA.z - gridPositionB.z);
         int remaining = Mathf.Abs(xDistance - zDistance);
         return MOVE_DIAGONAL_COST * Mathf.Min(xDistance, zDistance) + MOVE_STRAIGHT_COST * remaining;
     }
