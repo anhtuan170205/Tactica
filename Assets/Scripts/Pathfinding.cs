@@ -34,7 +34,7 @@ public class Pathfinding : MonoBehaviour
         this.height = height;
         this.cellSize = cellSize;
         gridSystem = new GridSystem<PathNode>(width, height, cellSize, (GridSystem<PathNode> g, GridPosition gridPosition) => new PathNode(gridPosition));
-        gridSystem.CreateDebugObject(gridDebugObjectPrefab);
+        //gridSystem.CreateDebugObject(gridDebugObjectPrefab);
 
         for (int x = 0; x < width; x++)
         {
@@ -42,8 +42,12 @@ public class Pathfinding : MonoBehaviour
             {
                 GridPosition gridPosition = new GridPosition(x, z);
                 Vector3 worldPosition = gridSystem.GetWorldPosition(gridPosition);
+
                 float rayCastOffsetDistance = 5f;
-                if (Physics.Raycast(worldPosition + Vector3.down * rayCastOffsetDistance, Vector3.up, rayCastOffsetDistance * 2, obstaclesLayerMask))
+                Vector3 rayStart = worldPosition + Vector3.down * rayCastOffsetDistance;
+                Vector3 rayDirection = Vector3.up;
+                float rayLength = rayCastOffsetDistance * 2;
+                if (Physics.Raycast(rayStart, rayDirection, rayLength, obstaclesLayerMask))
                 {
                     GetNode(x, z).SetIsWalkable(false);
                 }
