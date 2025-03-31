@@ -13,7 +13,7 @@ public class Unit : MonoBehaviour
     private GridPosition gridPosition;
     private HealthSystem healthSystem;
     private BaseAction[] actionArray;
-    private int actionPoints = 2;
+    private int actionPoints = ACTION_POINT_MAX;
 
     private void Awake()
     {

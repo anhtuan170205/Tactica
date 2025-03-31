@@ -23,7 +23,7 @@ public class LevelGrid : MonoBehaviour
         {
             Destroy(gameObject);
         }
-        gridSystem = new GridSystem<GridObject>(10, 10, 2f, (GridSystem<GridObject> g, GridPosition gridPosition) => new GridObject(g, gridPosition));
+        gridSystem = new GridSystem<GridObject>(width, height, cellSize, (GridSystem<GridObject> g, GridPosition gridPosition) => new GridObject(g, gridPosition));
         //gridSystem.CreateDebugObject(gridDebugObjectPrefab);
     }
 

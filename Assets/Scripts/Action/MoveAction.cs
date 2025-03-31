@@ -10,13 +10,8 @@ public class MoveAction : BaseAction
     [SerializeField] private float moveSpeed = 4f;
     [SerializeField] private float rotateSpeed = 15f;
     [SerializeField] private int moveRange = 5;
-    private Vector3 targetPosition;
-
-    protected override void Awake() 
-    {
-        base.Awake();
-        targetPosition = transform.position;
-    }
+    private List<Vector3> positionList;
+    private int currentPositionIndex;
 
     void Update()
     {
@@ -24,24 +19,38 @@ public class MoveAction : BaseAction
         {
             return;
         }
+        Vector3 targetPosition = positionList[currentPositionIndex];
         Vector3 direction = (targetPosition - transform.position).normalized;
+        
+        Quaternion targetRotation = Quaternion.LookRotation(direction);
+        transform.rotation = Quaternion.Slerp(transform.rotation, targetRotation, rotateSpeed * Time.deltaTime);
         float stopDistance = 0.1f;
+
         if (Vector3.Distance(transform.position, targetPosition) > stopDistance)
         {
             transform.position += direction * moveSpeed * Time.deltaTime;
         }
         else
         {
-            OnCompleteMove?.Invoke(this, EventArgs.Empty);
-            ActionComplete();
+            currentPositionIndex++;
+            if (currentPositionIndex >= positionList.Count)
+            {
+                OnCompleteMove?.Invoke(this, EventArgs.Empty);
+                ActionComplete();
+            }
         }
-        Quaternion targetRotation = Quaternion.LookRotation(direction);
-        transform.rotation = Quaternion.Slerp(transform.rotation, targetRotation, rotateSpeed * Time.deltaTime);
     }
 
     public override void ExecuteAction(GridPosition gridPosition, Action onActionComplete)
     {
-        this.targetPosition = LevelGrid.Instance.GetWorldPosition(gridPosition);
+        List<GridPosition> gridPositionList = Pathfinding.Instance.FindPath(unit.GetGridPosition(), gridPosition, out int pathLength);
+        currentPositionIndex = 0;
+        positionList = new List<Vector3>();
+
+        foreach (GridPosition pathGridPosition in gridPositionList)
+        {
+            positionList.Add(LevelGrid.Instance.GetWorldPosition(pathGridPosition));
+        }
         OnStartMove?.Invoke(this, EventArgs.Empty);
         ActionStart(onActionComplete);
     }
@@ -68,6 +77,19 @@ public class MoveAction : BaseAction
                 {
                     continue;
                 }
+                if (!Pathfinding.Instance.IsWalkableGridPosition(testGridPosition))
+                {
+                    continue;
+                }
+                if (!Pathfinding.Instance.HasPath(unitGridPosition, testGridPosition))
+                {
+                    continue;
+                }
+                int pathFindingDistanceMultiplier = 10;
+                if (Pathfinding.Instance.GetPathLength(unitGridPosition, testGridPosition) >= moveRange * pathFindingDistanceMultiplier)
+                {
+                    continue;
+                }
                 validActionGridPositionList.Add(testGridPosition);
             }
         }
@@ -79,14 +101,23 @@ public class MoveAction : BaseAction
     }
     public override EnemyAIAction GetEnemyAIAction(GridPosition gridPosition)
     {
-        int targetCountAtGridPosition = unit.GetAction<ShootAction>().GetTargetCountAtPosition(gridPosition);
-        int actionValue = targetCountAtGridPosition * 10;
+        int targetCount = unit.GetAction<ShootAction>().GetTargetCountAtPosition(gridPosition);
 
-        return new EnemyAIAction 
+        if (targetCount == 0)
         {
-            gridPosition = gridPosition,
-            actionValue =  actionValue,
-        };
+            return new EnemyAIAction
+            {
+                gridPosition = gridPosition,
+                actionValue = UnityEngine.Random.Range(1, 51)
+            };
+        }
+        else
+        {
+            return new EnemyAIAction
+            {
+                gridPosition = gridPosition,
+                actionValue = 50 + targetCount * 10,
+            };
+        }
     }
-
 }
