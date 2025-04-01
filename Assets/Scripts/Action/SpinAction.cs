@@ -21,14 +21,12 @@ public class SpinAction : BaseAction
             ActionComplete();
         }
     }
-
     public override void ExecuteAction(GridPosition gridPosition, Action onActionComplete)
     {
         totalSpinAmount = 0;
         ActionStart(onActionComplete);
 
     }
-
     public override string GetActionName()
     {
         return "Spin";
