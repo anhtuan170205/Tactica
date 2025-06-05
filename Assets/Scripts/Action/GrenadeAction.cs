@@ -28,7 +28,7 @@ public class GrenadeAction : BaseAction
     }
     public override List<GridPosition> GetValidActionGridPositionList()
     {
-        List<GridPosition> validActionGridPositionList = new List<GridPosition>();
+        List<GridPosition> validGridPositionList = new List<GridPosition>();
         GridPosition unitGridPosition = unit.GetGridPosition();
         for (int x = -throwRange; x <= throwRange; x++)
         {
@@ -36,37 +36,24 @@ public class GrenadeAction : BaseAction
             {
                 GridPosition offsetGridPosition = new GridPosition(x, z);
                 GridPosition testGridPosition = unitGridPosition + offsetGridPosition;
+
                 if (!LevelGrid.Instance.IsValidGridPosition(testGridPosition))
                 {
                     continue;
                 }
+
                 int testDistance = Mathf.Abs(x) + Mathf.Abs(z);
                 if (testDistance > throwRange)
                 {
                     continue;
                 }
-                if (!LevelGrid.Instance.HasUnitAtGridPosition(testGridPosition))
-                {
-                    continue;
-                }
-                Unit targetUnit = LevelGrid.Instance.GetUnitAtGridPosition(testGridPosition);
-                if (targetUnit.IsEnemyUnit() == unit.IsEnemyUnit())
-                {
-                    continue;
-                }
-                Vector3 unitWorldPosition = LevelGrid.Instance.GetWorldPosition(unitGridPosition);
-                Vector3 aimDirection = (targetUnit.GetWorldPosition() - unitWorldPosition).normalized;
-                float unitShoulderHeight = 1.5f;
-                if (Physics.Raycast(unitWorldPosition + Vector3.up * unitShoulderHeight, aimDirection, Vector3.Distance(unitWorldPosition, targetUnit.GetWorldPosition()), obstaclesLayerMask))
-                {
-                    continue;
-                }
 
-                validActionGridPositionList.Add(testGridPosition);
+                validGridPositionList.Add(testGridPosition);
             }
         }
-        return validActionGridPositionList;
-    }
+        return validGridPositionList;
+    } 
+
     public override EnemyAIAction GetEnemyAIAction(GridPosition gridPosition)
     {
         return new EnemyAIAction

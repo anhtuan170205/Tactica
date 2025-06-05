@@ -16,7 +16,7 @@ public class Pathfinding : MonoBehaviour
     private void Awake()
     {
         gridSystem = new GridSystem<PathNode>(10, 10, 2f , (GridSystem<PathNode> g, GridPosition gridPosition) => new PathNode(gridPosition));
-        gridSystem.CreateDebugObject(gridDebugObjectPrefab);
+        //gridSystem.CreateDebugObject(gridDebugObjectPrefab);
         if (Instance == null)
         {
             Instance = this;
@@ -190,6 +190,12 @@ public class Pathfinding : MonoBehaviour
     {
         return gridSystem.GetGridObject(gridPosition).IsWalkable();
     }
+
+    public void SetIsWalkableGridPosition(GridPosition gridPosition, bool isWalkable)
+    {
+        gridSystem.GetGridObject(gridPosition).SetIsWalkable(isWalkable);
+    }
+
     public bool HasPath(GridPosition startGridPosition, GridPosition endGridPosition)
     {
         return FindPath(startGridPosition, endGridPosition, out int pathLength) != null;
