@@ -67,6 +67,8 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: ee4490b7ea2e649cdac74704522ab05a, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  crateDestroyedPrefab: {fileID: 3197337381070175426, guid: 02a1c5f6632f84b8780a578dac99cf6e,
+    type: 3}
 --- !u!1001 &868194497508320769
 PrefabInstance:
   m_ObjectHideFlags: 0
