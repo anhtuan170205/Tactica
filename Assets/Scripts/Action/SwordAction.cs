@@ -48,8 +48,7 @@ public class SwordAction : BaseAction
                 state = State.SwingAfterHit;
                 float afterHitStateTime = 0.5f;
                 stateTimer = afterHitStateTime;
-                targetUnit.Damage(100);
-                OnAnySwordHit?.Invoke(this, EventArgs.Empty);
+                Slash(targetUnit);
                 break;
             case State.SwingAfterHit:
                 OnSwordActionCompleted?.Invoke(this, EventArgs.Empty);
@@ -64,6 +63,12 @@ public class SwordAction : BaseAction
         Quaternion aimRotation = Quaternion.LookRotation(aimDirection);
         float rotateSpeed = 10f;
         unit.transform.rotation = Quaternion.Slerp(unit.transform.rotation, aimRotation, rotateSpeed * Time.deltaTime);
+    }
+
+    private void Slash(Unit targetUnit)
+    {
+        targetUnit.Damage(100);
+        OnAnySwordHit?.Invoke(this, EventArgs.Empty);
     }
 
     public override string GetActionName()

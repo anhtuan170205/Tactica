@@ -95,6 +95,9 @@ public class GridSystemVisual : MonoBehaviour
             case SwordAction swordAction:
                 gridVisualType = GridVisualType.Red;
                 break;
+            case InteractAction interactAction:
+                gridVisualType = GridVisualType.Blue;
+                break;
         }
         ShowGridPositionList(selectedAction.GetValidActionGridPositionList(), gridVisualType);
     }
