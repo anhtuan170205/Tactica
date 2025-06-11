@@ -5,7 +5,7 @@ using System;
 
 public class Unit : MonoBehaviour
 {
-    private const int ACTION_POINT_MAX = 2;
+    private const int ACTION_POINT_MAX = 3;
     public static event EventHandler OnAnyActionPointsChanged;
     public static event EventHandler OnAnyUnitSpawned;
     public static event EventHandler OnAnyUnitDied;
